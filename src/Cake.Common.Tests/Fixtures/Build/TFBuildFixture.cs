@@ -23,16 +23,25 @@ namespace Cake.Common.Tests.Fixtures.Build
             Log = new FakeLog();
         }
 
-        public void IsRunningOnVSTS()
+        public void IsRunningOnAzureDevOpsWithMicrosoftHostedAgent()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("Hosted Agent");
+            Environment.GetEnvironmentVariable("SYSTEM_COLLECTIONURI").Returns("https://dev.azure.com/cake-build/");
+            Environment.GetEnvironmentVariable("SYSTEM_SERVERTYPE").Returns("Hosted");
+        }
+
+        public void IsRunningOnAzureDevOpsWithPrivateHostedAgent()
+        {
+            Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
+            Environment.GetEnvironmentVariable("SYSTEM_COLLECTIONURI").Returns("https://dev.azure.com/cake-build/");
+            Environment.GetEnvironmentVariable("SYSTEM_SERVERTYPE").Returns((string)null);
         }
 
         public void IsRunningOnTFS()
         {
             Environment.GetEnvironmentVariable("TF_BUILD").Returns("True");
-            Environment.GetEnvironmentVariable("AGENT_NAME").Returns("On Premises");
+            Environment.GetEnvironmentVariable("SYSTEM_COLLECTIONURI").Returns("https://tfs.mycompany.com/tfs");
+            Environment.GetEnvironmentVariable("SYSTEM_SERVERTYPE").Returns((string)null);
         }
 
         public TFBuildProvider CreateTFBuildService()

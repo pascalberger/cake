@@ -36,32 +36,47 @@ namespace Cake.Common.Tests.Unit.Build.TFBuild
             }
         }
 
-        public sealed class TheIsRunningOnVSTSProperty
+        public sealed class TheIsRunningOnAzureDevOpsProperty
         {
             [Fact]
-            public void Should_Return_True_If_Running_On_VSTS()
+            public void Should_Return_True_If_Running_On_AzureDevOps_With_Microsoft_Hosted_Agent()
             {
                 // Given
                 var fixture = new TFBuildFixture();
-                fixture.IsRunningOnVSTS();
+                fixture.IsRunningOnAzureDevOpsWithMicrosoftHostedAgent();
                 var vsts = fixture.CreateTFBuildService();
 
                 // When
-                var result = vsts.IsRunningOnVSTS;
+                var result = vsts.IsRunningOnAzureDevOps;
 
                 // Then
                 Assert.True(result);
             }
 
             [Fact]
-            public void Should_Return_False_If_Not_Running_On_VSTS()
+            public void Should_Return_True_If_Running_On_AzureDevOps_With_Private_Hosted_Agent()
+            {
+                // Given
+                var fixture = new TFBuildFixture();
+                fixture.IsRunningOnAzureDevOpsWithMicrosoftHostedAgent();
+                var vsts = fixture.CreateTFBuildService();
+
+                // When
+                var result = vsts.IsRunningOnAzureDevOps;
+
+                // Then
+                Assert.True(result);
+            }
+
+            [Fact]
+            public void Should_Return_False_If_Not_Running_On_AzureDevOps()
             {
                 // Given
                 var fixture = new TFBuildFixture();
                 var vsts = fixture.CreateTFBuildService();
 
                 // When
-                var result = vsts.IsRunningOnVSTS;
+                var result = vsts.IsRunningOnAzureDevOps;
 
                 // Then
                 Assert.False(result);
