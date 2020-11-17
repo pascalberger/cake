@@ -24,5 +24,6 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Cake")]
 [assembly: InternalsVisibleTo("Cake.Tool")]
 [assembly: InternalsVisibleTo("Cake.Common")]
+[assembly: InternalsVisibleTo("Cake.Frosting")]
 [assembly: InternalsVisibleTo("Cake.Core.Tests")]
 [assembly: InternalsVisibleTo("Cake.Testing.Xunit")]

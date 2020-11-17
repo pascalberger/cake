@@ -5,7 +5,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+
 using Cake.Core;
+using Cake.Core.Configuration;
+using Cake.Core.IO;
 using Cake.Core.Packaging;
 using Cake.Core.Tooling;
 
@@ -14,12 +17,14 @@ namespace Cake.Frosting.Internal
     internal sealed class ToolInstaller : IToolInstaller
     {
         private readonly ICakeEnvironment _environment;
+        private readonly ICakeConfiguration _configuration;
         private readonly IToolLocator _locator;
         private readonly List<IPackageInstaller> _installers;
 
-        public ToolInstaller(ICakeEnvironment environment, IToolLocator locator, IEnumerable<IPackageInstaller> installers)
+        public ToolInstaller(ICakeEnvironment environment, ICakeConfiguration configuration, IToolLocator locator, IEnumerable<IPackageInstaller> installers)
         {
             _environment = environment;
+            _configuration = configuration;
             _locator = locator;
             _installers = new List<IPackageInstaller>(installers ?? Enumerable.Empty<IPackageInstaller>());
         }
@@ -27,7 +32,7 @@ namespace Cake.Frosting.Internal
         public void Install(PackageReference tool)
         {
             // Get the tool path.
-            var root = _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment);
+            var toolsPath = GetToolsPath();
 
             // Get the installer.
             var installer = _installers.FirstOrDefault(i => i.CanInstall(tool, PackageType.Tool));
@@ -39,7 +44,7 @@ namespace Cake.Frosting.Internal
             }
 
             // Install the tool.
-            var result = installer.Install(tool, PackageType.Tool, root);
+            var result = installer.Install(tool, PackageType.Tool, toolsPath);
             if (result.Count == 0)
             {
                 const string format = "Failed to install tool '{0}'.";
@@ -52,6 +57,17 @@ namespace Cake.Frosting.Internal
             {
                 _locator.RegisterFile(item.Path);
             }
+        }
+
+        private DirectoryPath GetToolsPath()
+        {
+            var toolsPath = _configuration.GetValue(Constants.Paths.Tools);
+            if (!string.IsNullOrWhiteSpace(toolsPath))
+            {
+                return new DirectoryPath(toolsPath).MakeAbsolute(_environment);
+            }
+
+            return _environment.WorkingDirectory.Combine("tools").MakeAbsolute(_environment);
         }
     }
 }
