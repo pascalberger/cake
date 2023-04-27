@@ -25,6 +25,13 @@
     <Folder Include="Internal\Imported\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="*.props">
+      <Pack>true</Pack>
+      <PackagePath>build\;buildTransitive\</PackagePath>
+    </Content>
+  </ItemGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
