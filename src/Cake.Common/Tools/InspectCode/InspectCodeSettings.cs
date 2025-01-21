@@ -29,6 +29,12 @@ namespace Cake.Common.Tools.InspectCode
         public FilePath OutputFile { get; set; }
 
         /// <summary>
+        /// Gets or sets the output format.
+        /// If not defined output will be written in SARIF format.
+        /// </summary>
+        public InspectCodeFormat[] Format { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether enable solution-wide analysis should be forced.
         /// Default value is <c>false</c>.
         /// </summary>
@@ -119,6 +125,9 @@ namespace Cake.Common.Tools.InspectCode
         /// Gets or sets a value indicating whether to skip analysis of the file
         /// that was output by the command line tool or not.
         /// </summary>
+        /// <remarks>
+        /// Output analysis is only supported when <see cref="Format"/> is set to <see cref="InspectCodeFormat.Xml"/>."
+        /// </remarks>
         public bool SkipOutputAnalysis { get; set; }
 
         /// <summary>

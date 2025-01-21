@@ -139,6 +139,11 @@ namespace Cake.Common.Tools.InspectCode
                 builder.AppendQuoted(string.Format(CultureInfo.InvariantCulture, "/output:{0}", settings.OutputFile.MakeAbsolute(_environment).FullPath));
             }
 
+            if (settings.Format != null && settings.Format.Length != 0)
+            {
+                builder.AppendQuoted("/format=" + string.Join(";", settings.Format));
+            }
+
             if (settings.SolutionWideAnalysis && settings.NoSolutionWideAnalysis)
             {
                 throw new ArgumentException(
